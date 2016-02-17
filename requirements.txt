@@ -1,0 +1,4 @@
+django
+twilio
+django-import-export
+tablib

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>phones</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <br>
+        <div class="container">
+            <form class="form-inline" style="float:left;">
+                <div class="form-group">
+                    <input type="text" class="form-control" name="q" placeholder="Search">
+                </div>
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+            <form class="form-inline" style="margin-left:10px;float:left;" action="/import/" method="POST"
+                  enctype='multipart/form-data'>
+                {% csrf_token %}
+                <div class="form-group">
+                    <input type="file" class="form-control" name="file" placeholder="import contacts">
+                </div>
+                <button type="submit" class="btn btn-info">Import</button>
+            </form>
+        </div>
+    </div>
+
+    <nav>
+        <ul class="pagination" style="float:left;">
+            {% if persons.has_previous %}
+                <li>
+                    <a href="/page/{{ persons.previous_page_number }}?{{ request.urlencode }}"
+                       aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+            <li><a href="">Page {{ persons.number }} of {{ persons.paginator.num_pages }}</a></li>
+            {% if persons.has_next %}
+                <li>
+                    <a href="/page/{{ persons.next_page_number }}?{{ request.urlencode }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+        <ul class="nav nav-pills" style="padding:7px;">
+            <li role="presentation" style="margin:9px;">
+                <a href="/export/landline" class="btn btn-default">Export landline phones as Excel</a>
+            </li>
+            <li role="presentation" style="margin:9px;">
+                <a href="/export/mobile" class="btn btn-default">Export mobile phones as Excel</a>
+            </li>
+            <li role="presentation" style="margin:9px;">
+                <a href="/export/voip" class="btn btn-default">Export voip phones as Excel</a>
+            </li>
+            <li role="presentation" style="margin:9px;">
+                <a href="/export" class="btn btn-default">Export all phones as Excel</a>
+            </li>
+        </ul>
+    </nav>
+
+    <table class="table table-hover">
+        <tr>
+            <th><a href="?order=pk&{{ request.urlencode }}">#</a></th>
+            <th><a href="?order=name&{{ request.urlencode }}">Name</a></th>
+            <th>Phone 1</th>
+            <th>Phone 2</th>
+            <th><a href="?order=type&{{ request.urlencode }}">Type</a></th>
+        </tr>
+        {% for person in persons %}
+            <tr>
+                <td>{{ person.pk }}</td>
+                <td>{{ person.name }}</td>
+                <td>{{ person.phone_one }}</td>
+                <td>{{ person.phone_two }}</td>
+                <td>{{ person.type }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <nav>
+        <ul class="pagination">
+            {% if persons.has_previous %}
+                <li>
+                    <a href="/page/{{ persons.previous_page_number }}?{{ request.urlencode }}"
+                       aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+            <li><a href="">Page {{ persons.number }} of {{ persons.paginator.num_pages }}</a></li>
+            {% if persons.has_next %}
+                <li>
+                    <a href="/page/{{ persons.next_page_number }}?{{ request.urlencode }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+
+</div>
+</body>
+</html>
